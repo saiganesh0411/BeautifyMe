@@ -1,0 +1,18 @@
+﻿.btn-primary {
+    background-color: darkcyan !important;
+    color: black;
+    border-color: darkcyan !important;
+}
+
+.black-background {
+    background-color: white;
+    color: black;
+}
+
+.form-floating > label {
+    color: #0d6efd;
+}
+
+.emptyDiv {
+    height: 25px;
+}
