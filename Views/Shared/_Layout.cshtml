@@ -1,0 +1,212 @@
+﻿@using BeautifyMe.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity;
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BeautifyMe</title>
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/jqueryUI/css/base/jquery-ui-1.9.2.custom.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BeautifyMe.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script> 
+    <script src="~/lib/jquery-unobtrusive-ajax/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jqueryUI/js/jquery-1.8.3.js"></script>
+    <script src="~/lib/jqueryUI/js/jquery-ui-1.9.2.custom.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.3.0/crypto-js.js"></script> *@
+    <script src="~/lib/crypto-js/crypto-js.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</head>
+<body class="black-background">
+    <header class="black-background">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color:white; color:black !important">
+            <div class="container-fluid">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="navbar-brand" style="color:black !important" asp-area="" asp-controller="Home" asp-action="Index">Be-Elegant</a>
+                    <form id="searchForm" asp-action="Search" asp-controller="Home" method="get">
+                        <div class="search-box" style="display: flex; justify-content: center; align-items: center;">
+                            <input type="text" id="searchText" name="searchText" placeholder="Search" class="ui-autocomplete-input" autocomplete="off" style="width: 400px;">
+                            <button id="search-button" class="btn btn-primary" type="button">Search</button>
+                            <div id="autocomplete-results"></div>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <a class="navbar-brand" style="color:black !important" asp-area="" asp-controller="Landing" asp-action="Index">Be-Elegant</a>
+                }
+               
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <input type="hidden" id="sessionUserId"/>
+            <div id="message-container">
+            </div>
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>
+
+<style>
+    /* Style for the search box container */
+    .search-box {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Style for the search input field */
+    #searchText {
+        border: 2px solid #2A420C; /* Border color */
+        padding: 10px;
+        border-radius: 5px;
+        width: 200px;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+
+    /* Style for the search button */
+    #search-button {
+        background-color: #2A420C;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    /* Style for the autocomplete results container */
+    #autocomplete-results {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        z-index: 1;
+        width: 200px;
+        display: none; 
+    }
+    .ui-menu-item {
+        padding: 5px;
+        cursor: pointer;
+    }
+    .ui-state-focus {
+        background-color: #2A420C;
+        color: white;
+    }
+
+
+    /* styles for response messages  */
+    #message-container {
+        background-color: white; 
+        color: black;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1000;
+        display: none; 
+        justify-content: center;
+        position: sticky;
+        top: 10px;
+    }
+
+        #message-container.show {
+            display: flex; 
+        }
+
+    .message {
+        margin-bottom: 10px;
+        background-color: #333; 
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+        .message.success {
+            background-color: #4CAF50; /* Green for success messages */
+        }
+
+        .message.warning {
+            background-color: #FFC107; /* Yellow for warning messages */
+        }
+
+        .message.error {
+            background-color: #F44336; /* Red for error messages */
+        }
+</style>
+<script>
+    $(document).ready(function () {
+        getUserSessionInfo();
+        function handleAutocomplete(request, response) {
+            $.ajax({
+                url: "/Home/Suggestions", 
+                dataType: "json",
+                data: {
+                    term: request.term
+                },
+                success: function (data) {
+                    response(data);
+                }
+            });
+        }
+        $("#searchText").autocomplete({
+            source: handleAutocomplete,
+            minLength: 3,
+            select: function (event, ui) {
+                var selectedValue = ui.item.value;
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var searchButton = document.getElementById("search-button");
+        var searchText = document.getElementById("searchText");
+        var cardsHolderDiv = document.getElementById("cardsHolderDiv");
+
+        $('#searchForm').submit(function (event) {
+            // Prevent the default form submission
+            event.preventDefault();
+            performSerach();
+        });
+        if (searchButton) {
+            searchButton.addEventListener("click", function () {
+                performSerach();
+            });
+        }
+
+        function performSerach() {
+            var query = searchText.value;
+            fetch("/Home/Search?searchText=" + query, {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (data) {
+                    cardsHolderDiv.innerHTML = data;
+                })
+                .catch(function (error) {
+                    console.error("Error:", error);
+                });
+        }
+    });
+</script>

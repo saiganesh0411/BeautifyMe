@@ -1,0 +1,192 @@
+﻿@using BeautifyMe.BeautifyMeDbModels;
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<CardViewModel>
+
+@{
+    var noImageAvailable = "/imagesPNG/imagenotavailable.png";
+    var basePath = "/imagesPNG/";
+}
+
+<div>
+    @{
+        var items = Model.ToList();
+    }
+    @if (items.Count > 0)
+    {
+        @for (int i = 0; i < items.Count; i += 3)
+        {
+            <div class="item-container">
+                
+                
+                    @if (i < items.Count)
+                    {
+                        var item1 = items[i];
+                        <div class="item-card">
+                            
+                            <div class="item-image-container">
+                                <img src="@basePath@item1.Product.ImagePath" class="item-image" />
+                            </div>
+                            <div class="item-details">
+                                <h4>@item1.Product.ProductName</h4>
+                                <p>@item1.Product.ProductDescription</p>
+                                <p>Total Available Quantity: @item1.QuantityAvailable</p>
+                                <p style="font-weight:bold">Price: @item1.Price</p>
+                                <div class="share-options">
+                                    <!-- Share options go here -->
+                                </div>
+                                <div class="item-row">
+                                    <label for="item-sizes">Size:</label>
+                                    <select id="item-sizes" class="item-sizes">
+                                        <option value="" selected></option>
+                                        @foreach (var option in item1.AvailableSizes)
+                                        {
+                                            <option value="@option.SizeId">@option.SizeName</option>
+                                        }
+                                    </select>
+                                    <div class="quantity-control">
+                                        <button class="decrement">-</button>
+                                        <input type="text" class="quantity" id="item-quantity" value="1">
+                                        <button class="increment">+</button>
+                                    </div>
+                                    <input class="productId" type="hidden" value="@item1.ProductId" />
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    }
+                    @if (i + 1 < items.Count)
+                    {
+                        var item2 = items[i + 1];
+                        <div class="item-card">
+                            <div class="item-image-container">
+                                <img src="@basePath@item2.Product.ImagePath" class="item-image" />
+                            </div>
+                            <div class="item-details">
+                                <h4>@item2.Product.ProductName</h4>
+                                <p>@item2.Product.ProductDescription</p>
+                                <p>Total Available Quantity: @item2.QuantityAvailable</p>
+                                <p style="font-weight:bold">Price: @item2.Price</p>
+                                <div class="share-options">
+                                    <!-- Share options go here -->
+                                </div>
+                                <div class="item-row">
+                                    <label for="item-sizes">Size:</label>
+                                    <select id="item-sizes" class="item-sizes">
+                                        <option value="" selected></option>
+                                        @foreach (var option in item2.AvailableSizes)
+                                        {
+                                            <option value="@option.SizeId">@option.SizeName</option>
+                                        }
+                                    </select>
+                                    <div class="quantity-control">
+                                        <button class="decrement">-</button>
+                                        <input type="text" class="quantity" id="item-quantity" value="1">
+                                        <button class="increment">+</button>
+                                    </div>
+                                    <input class="productId" type="hidden" value="@item2.ProductId" />
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    }
+                    @if (i + 2 < items.Count)
+                    {
+                        var item3 = items[i + 2];
+                        <div class="item-card">
+                            <div class="item-image-container">
+                                <img src="@basePath@item3.Product.ImagePath" class="item-image" />
+                            </div>
+                            <div class="item-details">
+                                <h4>@item3.Product.ProductName</h4>
+                                <p>@item3.Product.ProductDescription</p>
+                                <p>Total Available Quantity: @item3.QuantityAvailable</p>
+                                <p style="font-weight:bold">Price: @item3.Price</p>
+                                <div class="share-options">
+                                    <!-- Share options go here -->
+                                </div>
+                                <div class="item-row">
+                                    <label for="item-sizes">Size:</label>
+                                    <select id="item-sizes" class="item-sizes">
+                                        <option value="" selected></option>
+                                        @foreach (var option in item3.AvailableSizes)
+                                        {
+                                            <option value="@option.SizeId">@option.SizeName</option>
+                                        }
+                                    </select>
+                                    <div class="quantity-control">
+                                        <button class="decrement">-</button>
+                                        <input type="text" class="quantity" id="item-quantity" value="1">
+                                        <button class="increment">+</button>
+                                    </div>
+                                    <input class="productId" type="hidden" value="@item3.ProductId" />
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    }
+                            
+            </div>
+        }
+    }
+    else
+    {
+        <div class="row no-items-div">Refine your search for some great products.</div>
+    }
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // Increment button click
+        $(document).on("click", ".item-card .increment", function () {
+            var quantityInput = $(this).siblings(".quantity");
+            var currentQuantity = parseInt(quantityInput.val(), 10);
+            if (!isNaN(currentQuantity)) {
+                quantityInput.val(currentQuantity + 1);
+            }
+        });
+
+        // Decrement button click
+        $(document).on("click", ".item-card .decrement", function () {
+            var quantityInput = $(this).siblings(".quantity");
+            var currentQuantity = parseInt(quantityInput.val(), 10);
+            if (!isNaN(currentQuantity) && currentQuantity > 1) {
+                quantityInput.val(currentQuantity - 1);
+            }
+        });
+
+        // Add to Cart button click
+        $(document).on("click", ".item-card .add-to-cart", function () {
+            var sizeSelect = $(this).siblings(".item-row").find(".item-sizes");
+            var quantityInput = $(this).siblings(".item-row").find(".quantity");
+            var productIdInput = $(this).siblings(".item-row").find(".productId");
+            var sizeId = sizeSelect.val();
+            var quantity = quantityInput.val();
+            var productId = productIdInput.val();
+            if (sizeId && quantity) {
+                // Perform your AJAX post here with sizeId and quantity
+                // You can use the $.ajax method to send the data to the server
+                $.ajax({
+                    url: "/Cart/AddToCart", // Replace with your actual URL
+                    type: "POST",
+                    data: {
+                        sizeId: sizeId,
+                        quantity: quantity,
+                        productId: productId
+                    },
+                    success: function (response) {
+                        showMessage("success", "Product added to cart.");
+                    },
+                    error: function (error) {
+                        showMessage("error", "Could not add the product to the cart at the moment. Try again later.");
+                    }
+                });
+            } else {
+                // Handle the case where size is not selected or quantity is not entered
+                showMessage("error", "Please select a size and enter a quantity.");
+            }
+        });
+    });
+</script>

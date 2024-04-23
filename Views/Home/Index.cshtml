@@ -1,0 +1,416 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model HomeViewModel
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="filter-container">
+        <form id="filterForm" asp-action="Filter" asp-controller="Home" method="get">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <div class="filter-option" onmouseover="showOptions('categoryOptions')" onmouseout="hideOptions('categoryOptions')">
+                        Categories
+                        <div class="filter-options" id="categoryOptions">
+                            @foreach (var option in Model.Categories)
+                            {
+                                <div onclick="selectOption('categoryId', '@option.CategoryId','@option.CategoryName')">@option.CategoryName</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-option" onmouseover="showOptions('brandOptions')" onmouseout="hideOptions('brandOptions')">
+                        Brands
+                        <div class="filter-options" id="brandOptions">
+                            @foreach (var option in Model.Brands)
+                            {
+                                <div onclick="selectOption('brandId', '@option.BrandId', '@option.BrandName')">@option.BrandName</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-option" onmouseover="showOptions('sizeOptions')" onmouseout="hideOptions('sizeOptions')">
+                        Sizes
+                        <div class="filter-options" id="sizeOptions">
+                            @foreach (var option in Model.Sizes)
+                            {
+                                <div onclick="selectOption('sizeId', '@option.SizeId', '@option.SizeDescription')">@option.SizeDescription</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <button id="filter-button" class="btn btn-primary" type="button">Filter</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <div id="selectedFilters" class="selected-filters">
+    </div>
+
+    <div id="cardsHolderDiv" class="cardsHolderDiv">
+        @Html.Partial("_Card", Model.Cards)
+    </div>
+
+</body>
+</html>
+<script type="text/javascript">
+    function showOptions(optionsId) {
+        document.getElementById(optionsId).style.display = "block";
+    }
+
+    function hideOptions(optionsId) {
+        document.getElementById(optionsId).style.display = "none";
+    }
+
+    var selectedCategory = null;
+    var selectedBrand = null;
+    var selectedSize = null;
+    var selectedCategoryId = null;
+    var selectedBrandId = null;
+    var selectedSizeId = null;
+
+    function selectOption(type, id, value) {
+        switch (type) {
+            case 'categoryId':
+                selectedCategory = value;
+                selectedCategoryId = id;
+                selectedBrand = null;
+                selectedSize = null;
+                selectedBrandId = null;
+                selectedSizeId = null;
+                break;
+            case 'brandId':
+                selectedBrand = value;
+                selectedBrandId = id;
+                break;
+            case 'sizeId':
+                selectedSize = value;
+                selectedSizeId = id;
+                break;
+        }
+
+        renderSelectedFilters();
+    }
+
+    function renderSelectedFilters() {
+        // Clear the selected filters container
+        var selectedFiltersContainer = document.getElementById("selectedFilters");
+        selectedFiltersContainer.innerHTML = "";
+        // Render selected filters
+        if (selectedCategory !== null) {
+            renderFilter(selectedCategory, 'categoryId');
+        }
+        if (selectedBrand !== null) {
+            renderFilter(selectedBrand, 'brandId');
+        }
+        if (selectedSize !== null) {
+            renderFilter(selectedSize, 'sizeId');
+        }
+    }
+
+    function renderFilter(value, type) {
+        var selectedFiltersContainer = document.getElementById("selectedFilters");
+        var selectedFilterElement = document.createElement("div");
+        selectedFilterElement.className = "selected-filter";
+        selectedFilterElement.innerHTML = `
+                <span class="selected-filter-text">${value}</span>                
+            `;
+        selectedFiltersContainer.appendChild(selectedFilterElement);
+    }
+
+    function removeSelectedFilter(type) {
+        switch (type) {
+            case 'categoryId':
+                selectedCategory = null;
+                selectedCategoryId = null;
+                break;
+            case 'brandId':
+                selectedBrand = null;
+                selectedBrandId = null;
+                break;
+            case 'sizeId':
+                selectedSize = null;
+                selectedSizeId = null;
+                break;
+        }
+        renderSelectedFilters();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var filterButton = document.getElementById("filter-button");
+        var filterForm = document.getElementById("filterForm");
+        var cardsHolderDiv = document.getElementById("cardsHolderDiv");
+
+        filterButton.addEventListener("click", function () {
+            var params = new URLSearchParams();
+            if (selectedCategoryId) params.append("categoryId", selectedCategoryId);
+            if (selectedBrandId) params.append("brandId", selectedBrandId);
+            if (selectedSizeId) params.append("sizeId", selectedSizeId);
+            fetch(filterForm.action + "?" + params.toString(), {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (data) {
+                    cardsHolderDiv.innerHTML = data;
+                })
+                .catch(function (error) {
+                    console.error("Error:", error);
+                });
+        });
+    });
+</script>
+
+
+<style>
+    .selected-filters {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 10px;
+        position: relative;
+        z-index: -1;
+    }
+
+
+    .selected-filter {
+        margin: 5px;
+        padding: 5px 10px;
+        background-color: darkcyan;
+        color: #fff;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    .selected-filter-text {
+        margin-right: 5px;
+    }
+
+    .remove-filter {
+        cursor: pointer;
+    }
+
+    .filter-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px;
+        text-align: center;
+        position: sticky;
+        top: 20px;
+        z-index: 1;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .filter-group {
+        margin-right: 20px;
+    }
+
+    .filter-option {
+        position: relative;
+        font-weight: bold;
+        padding: 10px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+    }
+
+        .filter-option:hover,
+        .filter-option:hover .filter-options {
+            border-bottom: 2px solid #333;
+        }
+
+    .filter-options {
+        display: none;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        z-index: 2;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        min-width: 200px;
+    }
+
+        .filter-options div {
+            padding: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .filter-options div:hover {
+                color: #333;
+                background-color: #f0f0f0;
+            }
+
+    .clear-filter {
+        cursor: pointer;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .cardsHolderDiv {
+        overflow-y: auto; /* Allow cards to scroll */
+        max-height: fit-content; /* Set a maximum height for the scrollable area */
+        padding: 10px;
+        /* Add other styles as needed */
+    }
+
+    label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    select {
+        padding: 8px;
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+
+    /* Styles for Item Cards */
+    .item-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .item-card {
+        background-color: white;
+        color: black;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        width: calc(33.33% - 20px); /* Adjust width for three cards per row with space between */
+        box-sizing: border-box; /* Include padding and border in the width */
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-right: 20px; /* Add margin for space between cards */
+    }
+
+
+    .item-image-container {
+        width: 100%;
+    }
+
+    .item-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .item-details {
+        padding-top: 20px;
+    }
+
+    .item-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .label {
+        margin-right: 10px;
+    }
+
+    .item-sizes {
+        padding: 8px;
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 70px;
+        margin-right: 10px; /* Add margin to separate from other elements */
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+        .quantity-control .quantity {
+            width: 50px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 0 10px; /* Add margin to separate from buttons */
+        }
+
+        .quantity-control button {
+            background-color: darkcyan;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+    .increment {
+        background-color: darkcyan; /* Adjust background color for buttons */
+        margin-left: 5px;
+    }
+
+    .decrement {
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .add-to-cart {
+        background-color: darkcyan; /* Adjust background color */
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px; /* Add margin to separate from other elements */
+    }
+
+    .no-items-div {
+        justify-content: center;
+        font-size: 25px;
+        margin-top: 100px;
+    }
+
+</style>
