@@ -1,0 +1,167 @@
+﻿@page
+@model BeautifyMe.Areas.Orders.Pages.OrdersModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}   
+@{
+    var basePath = "/imagesPNG/";
+}
+
+<div>
+    @foreach(var order in Model.Orders)
+    {
+        <div class="order-container">
+            <div class="order-header">
+                <p class="order-id">Order ID: @order.OrderId</p>
+                <p class="order-date">Ordered on: @order.OrderDate</p>
+                <p class="order-date">Card Used: @order.Card.MaskedCreditCard</p>
+            </div>
+
+            <div class="order-card">
+                
+            </div>
+
+            <ul class="product-list">
+                @foreach(var product in order.OrderProductMaps)
+                {
+                    var price = product.Quantity * product.Price;
+                    <li class="product-item">
+                        <img class="product-image" src="@basePath@product.Product.ImagePath" alt="Product">
+                        <div class="product-details">
+                            <h2 class="product-title">@product.Product.ProductName</h2>
+                            <p class="product-description">@product.Product.ProductDescription</p>
+                            <p class="product-quantity">Quantity Ordered: @product.Quantity</p>
+                            <p class="product-price">Price: @price</p>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="row emptyDiv"></div> 
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .order-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .order-id {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .order-date {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .order-card {
+            margin-top: 20px;
+        }
+
+        .product-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-item {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 10px;
+            display: flex;
+            background-color: #fff;
+        }
+
+        .product-image {
+            flex: 1;
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+        }
+
+        .product-details {
+            flex: 3;
+        }
+
+        .product-title {
+            font-size: 18px;
+            color: #333;
+            margin: 0;
+        }
+
+        .product-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .product-quantity {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 16px;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var currentUrl = window.location.href;
+            if (currentUrl.includes("isNotValid")) {
+                showMessage('error', "Entered security code is not correct. Can not proceed with payment");
+            }
+            $('.savedCardCheckbox').on('click', function () {
+                var checkbox = $(this);
+                var id = $(this).attr('id');
+                $('#selectedCardId').val(id);
+                $('.savedCardCheckbox').not(this).prop('checked', false);
+            });
+        });
+        
+        function encryptAndSubmit() {
+            
+            encryptElement('ENC_SelectedCardSecurity');
+        }
+
+        function encryptAndSubmit(event) {
+            var checkboxes = document.querySelectorAll('.savedCardCheckbox');
+            var anyCheckboxSelected = Array.from(checkboxes).some(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (anyCheckboxSelected && $('#addressDropdown').val() !== '') {
+                encryptElement('ENC_SelectedCardSecurity');
+            } else {
+                event.preventDefault();
+                showMessage('error', "Please select a card and address with which you want to proceed with payment. You can click on Add Card to enter card information and proceed with payment");
+            }
+        }
+
+    </script>
+}

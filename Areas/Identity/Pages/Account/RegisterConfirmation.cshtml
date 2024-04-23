@@ -1,0 +1,27 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Register confirmation";
+}
+
+<h1>@ViewData["Title"]</h1>
+@{
+    <div class="row">
+        <div class="col-md-8">
+            <form id="registerForm" method="post">
+                <div class="row emptyDiv"></div>
+                <h5>Please validate OTP sent to registered email.</h5>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="Input.OTP" class="form-control" autocomplete="OTP" aria-required="true" />
+                    <label asp-for="Input.OTP"></label>
+                    <span asp-validation-for="Input.OTP" class="text-danger"></span>
+                </div>
+                <input asp-for="Input.Email" type="hidden" />
+                <button id="validateOTP" type="submit" class="w-100 btn btn-lg btn-primary">Validate OTP</button>
+            </form>
+        </div>
+    </div>
+}
+

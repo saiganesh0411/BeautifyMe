@@ -1,0 +1,154 @@
+﻿@page
+@using BeautifyMe.Areas.Cart.Pages.Cart;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model CartModel
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<div>
+    @{
+        var items = Model.Input.CartItems.ToList();
+        var noImageAvaialble = "/imagesPNG/imagenotavailable.png";
+        var basePath = "/imagesPNG/";
+    }
+    @if (items.Count > 0)
+    {
+            
+            @for (int i = 0; i < items.Count; i++)
+            {               
+                <div class="item-container">
+                    <!-- First Item Card -->
+                    <div class="item-card">
+                        @if (i < items.Count)
+                        {
+                            var item = items[i];
+                        <form style="display: flex" id="remove-from-cart-form" action="/Cart/RemoveItemFromCart/?cartProductMapId=@item.CartProductMapId" method="POST">
+                                @* <input type="hidden" id="cartProductMapId" name="cartProductMapId" value="@item.CartProductMapId"> *@
+                                <div class="item-image-container">
+                                    <img src="@basePath@item.Product.ImagePath" class="item-image" />
+                                </div>
+                                <div class="item-details">
+                                    @* <input asp-for="Input.cartId" type="hidden" /> *@
+                                    <h4>@item.Product.ProductName</h4>
+                                    <p>@item.Product.ProductDescription</p>
+                                    <p>Quantity Selected: @item.Quatity</p>
+                                    <p>Size Selected: @item.Size.SizeName</p>
+                                    <p>Total Price: @Model.Input.Prices[i]</p>
+                                    <button class="removeFromCart" type="submit">Remove from Cart</button>
+                                </div>
+                            </form>
+                        }
+                    </div>
+                </div>
+            }
+            
+            <div class="row makePaymentDiv">
+            <a style="color: white;font-size:30px" asp-page="Payment" asp-area="Payment" class="btn btn-primary">Choose address and pay</a>
+            </div>
+           
+    }
+    else
+    {
+        <div class="row no-items-div">Add items to cart.</div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        // $(document).ready(function () {
+        //     $(".remove-from-cart").click(function () {
+        //         var cartId = $(this).data("cartid"); 
+        //         removeFromCart(cartId);
+        //     });
+
+        //     function removeFromCart(cartId) {
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "/Cart/RemoveFromCart", 
+        //             data: { cartId: cartId },
+        //             success: function (response) {
+        //                 $("div[data-cartitem='" + cartId + "']").remove();
+        //             },
+        //             error: function (error) {
+        //                 // Handle the error
+        //             }
+        //         });
+        //     }
+        // });
+    </script>
+    <style>
+        .item-container {
+            display: flex; /* Use flexbox to control layout */
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .item-card {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 20px;
+            width: 1000px;
+            text-align: center;
+            display: flex; /* Display image container and item details side by side */
+            overflow: hidden;
+        }
+
+        .item-image-container {
+            width: 400px; /* Set the width for the image container */
+        }
+
+        .item-image {
+            max-width: 100%;
+            height: 225px; /* Maintain image aspect ratio */
+        }
+
+        .item-details {
+            text-align: center; /* Adjust text alignment as needed */
+            width: 50%; /* Set the width for the item details container */
+            padding: 0 10px;
+        }
+
+        h4 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .removeFromCart {
+            background-color: #dc3545;
+            color: white; /* Adjust button text color */
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .no-items-div {
+            justify-content: center;
+            font-size: 25px;
+            margin-top: 100px;
+        }
+
+        .makePayment {
+            background-color: #007bff;
+            color: white;
+            width: 300px;
+        }
+
+        .makePaymentDiv {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+}

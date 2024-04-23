@@ -1,0 +1,373 @@
+﻿@page
+@using BeautifyMe.Areas.Product.Pages.Card
+@model CardModel
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <div class="item-container">
+        <!-- Item Cards -->
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+
+        <!-- Repeat the above item card structure for other items -->
+    </div>
+    <div class="item-container">
+        <!-- Item Cards -->
+        <div class="item-card">
+            <img src="~/images/ImageNotAvailable.png" alt="Image" style="width:200px">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <!-- Repeat the above item card structure for other items -->
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+    </div>
+    <div class="item-container">
+        <!-- Item Cards -->
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <!-- Repeat the above item card structure for other items -->
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="item-card">
+            <img src="item1.jpg" alt="Item 1">
+            <h4>Item 1</h4>
+            <p>Description of Item 1</p>
+            <p>Total Available Quantity: 10</p>
+            <div class="item-row">
+                <label for="item-sizes">Size:</label>
+                <select id="item-sizes" style="width: auto;">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+                <div style="width:5px"></div>
+                <div class="quantity-control">
+                    <button class="decrement">-</button>
+                    <input type="text" class="quantity" id="item-quantity" value="1">
+                    <button class="increment">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Styles for Filters */
+    .filter-container {
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px;
+        text-align: center;
+    }
+
+    .filter-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        margin: 10px;
+    }
+
+    label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    select {
+        padding: 8px;
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Styles for Item Cards */
+    .item-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .item-card {
+        background-color: black;
+        color: white;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin: 20px;
+        width: 300px;
+        text-align: center;
+    }
+
+    item-card img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    p {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .item-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    label, select {
+        font-weight: bold;
+    }
+
+    select {
+        padding: 8px;
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+    }
+
+    button {
+        background-color: black;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .increment {
+        background-color: black;
+        margin-left: 5px;
+    }
+
+    .decrement {
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .quantity {
+        width: 50px;
+    }
+
+    .add-to-cart {
+        background-color: black;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(".item-card").on("click", ".increment", function () {
+            var $quantityInput = $(this).siblings(".quantity");
+            var quantity = parseInt($quantityInput.val());
+            $quantityInput.val(quantity + 1);
+        });
+
+        $(".item-card").on("click", ".decrement", function () {
+            var $quantityInput = $(this).siblings(".quantity");
+            var quantity = parseInt($quantityInput.val());
+            if (quantity > 1) {
+                $quantityInput.val(quantity - 1);
+            }
+        });
+    });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,85 @@
+﻿@page
+@model ProfileModel
+
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Profile;
+}
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-12">
+        <form id="profileForm" method="post">
+            <h2>Create a new account.</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.FirstName" class="form-control" autocomplete="FirstName" aria-required="true" readonly />
+                        <label asp-for="Input.FirstName"></label>
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.LastName" class="form-control" autocomplete="LastName" aria-required="true" readonly />
+                        <label asp-for="Input.LastName"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="height: 25px;"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.PhoneNumber" class="form-control" aria-required="true" readonly />
+                        <label asp-for="Input.PhoneNumber"></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.Email" class="form-control" aria-required="true" readonly/>
+                        <label asp-for="Input.Email"></label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="height: 25px;"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.Experience" class="form-control" aria-required="true" />
+                        <label asp-for="Input.Experience"></label>
+                        <span asp-validation-for="Input.Experience" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.Certifications" class="form-control" autocomplete="Certifications" aria-required="true" />
+                        <label asp-for="Input.Certifications"></label>
+                        <span asp-validation-for="Input.Certifications" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="height: 25px;"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <textarea asp-for="Input.Description" class="form-control description-box" autocomplete="Description" aria-required="true"></textarea>
+                        <label asp-for="Input.Description"></label>
+                        <span asp-validation-for="Input.Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="height: 25px;"></div>
+            <input type="hidden" asp-for="Input.InstructorId" />
+            <input type="hidden" asp-for="Input.UserId" />
+            <button id="updateInstructor" type="submit" class="w-100 btn btn-lg btn-primary">Update Intructor</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+@* test *@

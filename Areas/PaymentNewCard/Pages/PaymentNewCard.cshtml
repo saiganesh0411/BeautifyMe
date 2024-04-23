@@ -1,0 +1,142 @@
+﻿@page
+@using BeautifyMe.Areas.PaymentNewCard.Pages;
+@model PaymentNewCardModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}   
+
+
+<div class="payment-container">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <h2 style="text-align: center; font-size:30px">Payment</h2>
+    <form asp-page="PaymentNewCard" method="post" id="paymentForm">
+        <div class="new-card">
+            <h5>Amount Payable: @Model.Input.TotalPrice</h5>
+            
+            <div class="row emptyDiv"></div>
+            <a id="addNewAddress" class="anchorLink" asp-page="address" asp-area="address" class="btn">Click here to add address or choose from addresses below</a>
+            <div class="form-group">
+                <label for="Address">Address</label>
+                <select asp-for="Input.AddressId" id="addressDropdown" class="form-control" required>
+                    <option value="">Select an address</option>
+                    @foreach (var address in Model.Input.UserAddresses)
+                    {
+                        <option value="@address.AddressId">@address.FirstName @address.LastName - @address.AddressLine1, @address.State, @address.ZipCode</option>
+                    }
+                </select>
+                <span asp-validation-for="Input.AddressId" class="text-danger"></span>
+            </div>
+            <div class="row emptyDiv"></div>
+
+            <div class="form-floating">
+                <input asp-for="Input.CardHolderName" id="ENC_CardHolderName" class="form-control" />
+                <label asp-for="Input.CardHolderName"></label>
+                <span asp-validation-for="Input.CardHolderName" class="text-danger"></span>
+            </div>
+            <div class="row emptyDiv"></div>
+            <div class="form-floating">
+                <input asp-for="Input.CardNumber" id="ENC_CardNumber" class="form-control" />
+                <label asp-for="Input.CardNumber"></label>
+                <span asp-validation-for="Input.CardNumber" class="text-danger"></span>
+            </div>
+            <div class="row emptyDiv"></div>
+            <div class="card-inputs">
+                <div class="form-floating">
+                    <input asp-for="Input.ExpirationDate" id="ENC_ExpirationDate" class="form-control" />
+                    <label asp-for="Input.ExpirationDate"></label>
+                    <span asp-validation-for="Input.ExpirationDate" class="text-danger"></span>
+                </div>
+                <div class="row emptyDiv"></div>
+                <div class="card-cvv">
+                    <div class="form-floating">
+                        <input asp-for="Input.CVV" id="ENC_CVV" class="form-control" />
+                        <label asp-for="Input.CVV"></label>
+                        <span asp-validation-for="Input.CVV" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-check">
+                <input asp-for="Input.SaveCardInfo" class="form-check-input" />
+                <label asp-for="Input.SaveCardInfo" class="form-check-label">Save Card Information</label>
+            </div>
+        </div>
+        <div class="row emptyDiv"></div>        
+        <div>
+            <button type="submit" onclick="encryptDataAndSubmit(event)" class="btn btn-primary">Make Payment</button>
+        </div>
+       
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <style>
+        .payment-container {
+            margin: 0 auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: black;
+        }
+
+        /* Saved Cards */
+        .saved-card {
+            display: flex;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+            flex-direction: column;
+            font-size: 25px;
+        }
+
+            .saved-card input[type="checkbox"] {
+                margin-right: 10px;
+            }
+
+        .card-details {
+            flex: 1;
+            padding-left: 150px;
+        }
+
+        /* Add New Card */
+        .new-card .form-group {
+            margin: 10px 0;
+        }
+
+        /* Submit Button */
+        button[type="submit"] {
+            margin: 20px 0;
+        }
+
+        .anchorLink {
+            color: #0d6efd;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function encryptDataAndSubmit(event) {
+            if ($('#addressDropdown').val() !== '') {
+                encryptElement('ENC_CardHolderName');
+                encryptElement('ENC_CardNumber');
+                encryptElement('ENC_ExpirationDate');
+                encryptElement('ENC_CVV');
+            } else {
+                event.preventDefault();
+                showMessage('error', "Please select address for the order.");
+            }
+            
+        }
+    </script>
+}
